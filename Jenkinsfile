@@ -15,9 +15,10 @@ pipeline {
             steps {
                 sh 'chmod +x ./test2.sh'
                 sh './test2.sh'
-                cat './test2.sh'
-                
-            }
+               script {
+                    
+                    sh 'cat ./test2.sh'
+                }
         }
         stage('Run test3.sh') {
             steps {
