@@ -1,28 +1,24 @@
-pipeline {
+pipeline{
     agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
+    stages{
+        stage('Print Info'){
+            steps{
+                sh 'echo "Branch: $(git rev-parse --abbrev-ref HEAD)"'
+                sh 'echo "Hash: $(git rev-parse HEAD)"'
+                sh 'echo "g++ version: $(g++ --version)"'
             }
         }
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
+        stage('Build Executable file'){
+            steps{
+                // Компилируем main.cpp и сохраняем результат в файл main
+                sh 'g++ main.cpp -o main'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'docker build -t my-app .'
-                sh 'docker push my-app:latest'
+        stage('Application Launch Test'){
+            steps{
+                // Запускаем исполняемый файл main из текущего каталога
+                sh './tester'
             }
         }
     }
 }
-
