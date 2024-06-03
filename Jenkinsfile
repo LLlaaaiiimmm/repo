@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh 'chmod +x ./test2.sh'
                 sh './test2.sh'
-                cat ./test2.sh
+                cat './test2.sh'
                 
             }
         }
