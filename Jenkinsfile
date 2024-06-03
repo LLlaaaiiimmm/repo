@@ -6,7 +6,7 @@ pipeline {
                 sh 'chmod +x ./test1.sh'
                 sh './test1.sh'
                 script {
-                    echo "Contents of test1.sh:"
+                    
                     sh 'cat ./test1.sh'
                 }
             }
@@ -16,7 +16,7 @@ pipeline {
                 sh 'chmod +x ./test2.sh'
                 sh './test2.sh'
                 script {
-                    echo "Contents of test2.sh:"
+                    
                     sh 'cat ./test2.sh'
                 }
             }
@@ -26,7 +26,7 @@ pipeline {
                 sh 'chmod +x ./test3.sh'
                 sh './test3.sh'
                 script {
-                    echo "Contents of test3.sh:"
+                    
                     sh 'cat ./test3.sh'
                 }
             }
