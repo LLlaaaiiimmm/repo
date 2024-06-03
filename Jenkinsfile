@@ -1,27 +1,72 @@
-pipeline {
+pipeline{
     agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
+    parameters{
+        string(name: 'FILE_NAME', defaultValue: 'app', description: 'Имя исполняемого файла')
+        booleanParam(name: 'RUN_UNIT', defaultValue: true, description: 'Запускать unit тесты')
+        booleanParam(name: 'RUN_INTEGRATION', defaultValue: true, description: 'Запускать integration тесты')
+    }
+    stages{
+        stage('Print Info'){
+            steps{
+                sh 'echo "Branch: $(git rev-parse --abbrev-ref HEAD)"'
+                sh 'echo "Hash: $(git rev-parse HEAD)"'
+                sh 'echo "g++ version: $(g++ --version)"'
             }
         }
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
+        stage('Build Executable file'){
+            steps{
+                sh """g++ app.cpp -o ${params.FILE_NAME}"""
             }
         }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+        stage('Run Unit Tests'){
+            when {
+                expression { return params.RUN_UNIT }
+            }
+            steps{
+                sh """
+                   chmod u+x unit_tests.sh
+                   ./unit_tests.sh
+                   """
             }
         }
-        stage('Deploy') {
-            steps {
-                sh 'docker build -t my-app .'
-                sh 'docker push my-app:latest'
+        stage('Run Integration Tests'){
+            when {
+                expression { return params.RUN_INTEGRATION }
             }
+            steps{
+                sh """
+                   chmod u+x integration_tests.sh
+                   ./integration_tests.sh
+                   """
+            }
+        }
+        stage('Application Launch Test'){
+            steps{
+                sh """./${params.FILE_NAME}"""
+            }
+        }
+        stage('Sending an artifact to Prod'){
+            steps{
+			    // Настройки плагина Publish Over SSH
+                sshPublisher(
+                             publishers: [
+                                 sshPublisherDesc(
+                                     configName: "ivd",
+                                     transfers: [
+                                        sshTransfer(sourceFiles: "${params.FILE_NAME}")
+                                     ]
+                                 )
+                             ]
+                )
+            }
+        }
+    }
+    post{
+        success{
+            echo 'You can go home'
+        }
+        failure{
+            echo 'Sit and work on'
         }
     }
 }
