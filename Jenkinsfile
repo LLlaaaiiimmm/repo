@@ -7,10 +7,10 @@ pipeline {
                     def currentDate = new Date().format('MM-dd')
                     def filename = '04.06.sh'
                     if (currentDate == filename.replaceAll('.sh', '')) {
-                        sh "cat $filename"
+                        sh "cat $04.06.sh"
                     } else {
                         sh 'chmod +x ./$filename'
-                        sh "./$filename"
+                        sh "./$04.06.sh"
                     }
                 }
             }
@@ -21,10 +21,10 @@ pipeline {
                     def currentDate = new Date().format('MM-dd')
                     def filename = '10.10.sh'
                     if (currentDate == filename.replaceAll('.sh', '')) {
-                        sh "cat $filename"
+                        sh "cat $10.10.sh"
                     } else {
                         sh 'chmod +x ./$filename'
-                        sh "./$filename"
+                        sh "./$10.10.sh"
                     }
                 }
             }
