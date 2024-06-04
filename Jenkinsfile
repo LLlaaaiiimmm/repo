@@ -1,22 +1,32 @@
 pipeline {
     agent any
     stages {
-        stage('Run test1.sh') {
+        stage('Run 04.06.sh') {
             steps {
-                sh 'chmod +x ./test1.sh'
-                sh './test1.sh'
+                script {
+                    def currentDate = new Date().format('MM-dd')
+                    def filename = '04.06.sh'
+                    if (currentDate == filename.replaceAll('.sh', '')) {
+                        sh "cat $filename"
+                    } else {
+                        sh 'chmod +x ./$filename'
+                        sh "./$filename"
+                    }
+                }
             }
         }
-        stage('Run test2.sh') {
+        stage('Run 10.10.sh') {
             steps {
-                sh 'chmod +x ./test2.sh'
-                sh './test2.sh'
-            }
-        }
-        stage('Run test3.sh') {
-            steps {
-                sh 'chmod +x ./test3.sh'
-                sh './test3.sh'
+                script {
+                    def currentDate = new Date().format('MM-dd')
+                    def filename = '10.10.sh'
+                    if (currentDate == filename.replaceAll('.sh', '')) {
+                        sh "cat $filename"
+                    } else {
+                        sh 'chmod +x ./$filename'
+                        sh "./$filename"
+                    }
+                }
             }
         }
     }
